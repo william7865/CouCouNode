@@ -51,6 +51,26 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// ROUTE : Profil
+app.get("/profile", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { email } = decoded;
+    const user = await User.getUserByEmail(email);
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+    res.json({ user });
+  } catch (error) {
+    res.status(401).json({ error: "Token invalide" });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
