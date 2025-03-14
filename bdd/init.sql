@@ -117,3 +117,7 @@ CREATE TABLE Notifications (
     sent_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
+-- Insertion d'un compte admin
+INSERT INTO Users (email, password, full_name, role)
+VALUES ('admin@example.com', '$2b$10$qxqMRCkBr5ATk1E7vbkp9uVSDY7xmWoCrwSPclG.BlYZkrUx9FfrW', 'Administrateur', 'admin');
+-- Mot de passe : 123
