@@ -1,118 +1,128 @@
-CREATE DATABASE streaming_service;
-USE streaming_service;
+-- Supprimer les anciennes tables si elles existent
+DROP TABLE IF EXISTS Users CASCADE;
+DROP TABLE IF EXISTS Profiles CASCADE;
+DROP TABLE IF EXISTS Devices CASCADE;
+DROP TABLE IF EXISTS Payments CASCADE;
+DROP TABLE IF EXISTS Genres CASCADE;
+DROP TABLE IF EXISTS Movies CASCADE;
+DROP TABLE IF EXISTS Series CASCADE;
+DROP TABLE IF EXISTS Episodes CASCADE;
+DROP TABLE IF EXISTS Watch_History CASCADE;
+DROP TABLE IF EXISTS Watchlists CASCADE;
+DROP TABLE IF EXISTS Subscriptions CASCADE;
+DROP TABLE IF EXISTS Notifications CASCADE;
 
+-- Créer les types ENUM
+CREATE TYPE user_status AS ENUM ('active', 'inactive');
+CREATE TYPE user_role AS ENUM ('admin', 'user');
+CREATE TYPE profile_status AS ENUM ('active', 'inactive');
+CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed');
+CREATE TYPE subscription_status AS ENUM ('active', 'canceled', 'pending');
+CREATE TYPE notification_status AS ENUM ('sent', 'pending');
+
+-- Créer les tables
 CREATE TABLE Users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     full_name VARCHAR(255),
     birth_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    status ENUM('active', 'inactive') DEFAULT 'active',
-    role ENUM('admin', 'user') DEFAULT 'user'
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status user_status DEFAULT 'active',
+    role user_role DEFAULT 'user'
 );
 
 CREATE TABLE Profiles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     amount DECIMAL(6,2),
-    payment_date DATETIME,
-    status ENUM('active', 'inactive'),
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    payment_date TIMESTAMP,
+    status profile_status
 );
 
 CREATE TABLE Devices (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     device_name VARCHAR(255),
     device_type VARCHAR(50),
-    last_active DATETIME,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    last_active TIMESTAMP
 );
 
 CREATE TABLE Payments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     amount DECIMAL(6,2),
-    payment_date DATETIME,
-    status ENUM('pending', 'completed', 'failed'),
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    payment_date TIMESTAMP,
+    status payment_status
 );
 
 CREATE TABLE Genres (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    genre_name VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
+    genre_name VARCHAR(255)
 );
 
 CREATE TABLE Movies (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     title VARCHAR(255),
     description TEXT,
-    release_year YEAR,
-    last_active DATETIME,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    release_year INTEGER,
+    last_active TIMESTAMP
 );
 
 CREATE TABLE Series (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     description TEXT,
-    release_year YEAR,
+    release_year INTEGER,
     rating DECIMAL(2,1),
-    created_at DATETIME,
-    updated_at DATETIME
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TABLE Episodes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    series_id INT,
+    id SERIAL PRIMARY KEY,
+    series_id INT REFERENCES Series(id) ON DELETE CASCADE,
     season INT,
     episode INT,
     title VARCHAR(255),
     duration INT,
     release_date DATE,
-    created_at DATETIME,
-    updated_at DATETIME,
-    FOREIGN KEY (series_id) REFERENCES Series(id) ON DELETE CASCADE
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TABLE Watch_History (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
+    id SERIAL PRIMARY KEY,
+    profile_id INT REFERENCES Profiles(id) ON DELETE CASCADE,
     content_id INT,
-    watched_at DATETIME,
-    progress INT,
-    FOREIGN KEY (profile_id) REFERENCES Profiles(id) ON DELETE CASCADE
+    watched_at TIMESTAMP,
+    progress INT
 );
 
 CREATE TABLE Watchlists (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    profile_id INT,
+    id SERIAL PRIMARY KEY,
+    profile_id INT REFERENCES Profiles(id) ON DELETE CASCADE,
     content_id INT,
-    added_at DATETIME,
-    FOREIGN KEY (profile_id) REFERENCES Profiles(id) ON DELETE CASCADE
+    added_at TIMESTAMP
 );
 
 CREATE TABLE Subscriptions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     plan VARCHAR(50),
     price DECIMAL(6,2),
-    status ENUM('active', 'canceled', 'pending'),
-    created_at DATETIME,
-    updated_at DATETIME,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    status subscription_status,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TABLE Notifications (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
     message TEXT,
-    status ENUM('sent', 'pending'),
-    sent_at DATETIME,
-    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+    status notification_status,
+    sent_at TIMESTAMP
 );
