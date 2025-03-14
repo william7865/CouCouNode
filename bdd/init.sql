@@ -23,6 +23,7 @@ CREATE TYPE notification_status AS ENUM ('sent', 'pending');
 -- Créer les tables
 CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     full_name VARCHAR(255),
@@ -74,10 +75,14 @@ CREATE TABLE Movies (
 
 CREATE TABLE Series (
     id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(255),
     description TEXT,
     release_year INTEGER,
+    release_year INTEGER,
     rating DECIMAL(2,1),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -126,3 +131,7 @@ CREATE TABLE Notifications (
     status notification_status,
     sent_at TIMESTAMP
 );
+-- Insertion d'un compte admin
+INSERT INTO Users (email, password, full_name, role)
+VALUES ('admin@example.com', '$2b$10$qxqMRCkBr5ATk1E7vbkp9uVSDY7xmWoCrwSPclG.BlYZkrUx9FfrW', 'Administrateur', 'admin');
+-- Mot de passe : 123
