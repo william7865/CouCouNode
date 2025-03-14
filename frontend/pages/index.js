@@ -65,7 +65,6 @@ export default function Home() {
           window.location.reload(); // Recharge la page pour forcer la déconnexion
         }}
       >
-        Se Déconnecter
       </button>
     </div>
   );
