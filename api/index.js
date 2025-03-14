@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const User = require("./models/user");
-const Movie = require("./models/movie");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -69,27 +68,6 @@ app.get("/profile", async (req, res) => {
     res.json({ user });
   } catch (error) {
     res.status(401).json({ error: "Token invalide" });
-  }
-});
-
-// ROUTE : Créer un film
-app.post("/movies", async (req, res) => {
-  try {
-    const newMovie = await Movie.createMovie(req.body);
-    res.status(201).json(newMovie);
-  } catch (err) {
-    console.error("Erreur lors de l'ajout du film :", err);
-    res.status(500).json({ error: "Erreur lors de l'ajout du film." });
-  }
-});
-
-// ROUTE : Récupérer les films
-app.get("/movies", async (req, res) => {
-  try {
-    const movies = await Movie.getAllMovies(); // Assurez-vous que cette méthode existe dans votre modèle Movie
-    res.json(movies);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 });
 
