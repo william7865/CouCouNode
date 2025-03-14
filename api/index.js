@@ -83,6 +83,16 @@ app.post("/movies", async (req, res) => {
   }
 });
 
+// ROUTE : Récupérer les films
+app.get("/movies", async (req, res) => {
+  try {
+    const movies = await Movie.getAllMovies(); // Assurez-vous que cette méthode existe dans votre modèle Movie
+    res.json(movies);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {

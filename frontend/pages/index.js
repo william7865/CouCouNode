@@ -1,5 +1,3 @@
-// pages/index.js
-
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
@@ -20,7 +18,7 @@ export default function Home() {
     // Fonction pour récupérer les films depuis l'API
     const fetchMovies = async () => {
       try {
-        const response = await fetch("/api/movies"); // Appel à l'API pour récupérer les films
+        const response = await fetch("http://localhost:3001/movies"); // Appel à l'API pour récupérer les films
         const data = await response.json(); // Parse la réponse JSON
         setMovies(data); // Stocke les films dans l'état local
       } catch (error) {
@@ -65,6 +63,7 @@ export default function Home() {
           window.location.reload(); // Recharge la page pour forcer la déconnexion
         }}
       >
+        Déconnexion
       </button>
     </div>
   );
