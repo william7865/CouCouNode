@@ -54,6 +54,7 @@ class Series {
     const result = await pool.query("SELECT * FROM series WHERE genre = $1", [
       genre,
     ]);
+    return result.rows;
   }
 }
 
