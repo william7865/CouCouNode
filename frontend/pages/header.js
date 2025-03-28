@@ -34,22 +34,75 @@ export default function Header() {
         zIndex: 1000,
       }}
     >
-      <nav style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div>
           <img src="/logo.png" alt="Logo" style={{ height: "40px" }} />
         </div>
 
         <div style={{ display: "flex", gap: "1.5rem", color: "#fff" }}>
-          <Link href="/" style={{ borderBottom: isActive("/") ? "2px solid white" : "none" }}>Accueil</Link>
-          <Link href="/movie" style={{ borderBottom: isActive("/movie") ? "2px solid white" : "none" }}>Film</Link>
-          <Link href="/series" style={{ borderBottom: isActive("/series") ? "2px solid white" : "none" }}>Série</Link>
-          <Link href="/news" style={{ borderBottom: isActive("/news") ? "2px solid white" : "none" }}>Nouveautés</Link>
+          <Link
+            href="/"
+            style={{ borderBottom: isActive("/") ? "2px solid white" : "none" }}
+          >
+            Accueil
+          </Link>
+          <Link
+            href="/movie"
+            style={{
+              borderBottom: isActive("/movie") ? "2px solid white" : "none",
+            }}
+          >
+            Film
+          </Link>
+          <Link
+            href="/series"
+            style={{
+              borderBottom: isActive("/series") ? "2px solid white" : "none",
+            }}
+          >
+            Série
+          </Link>
+          <Link
+            href="/news"
+            style={{
+              borderBottom: isActive("/news") ? "2px solid white" : "none",
+            }}
+          >
+            Nouveautés
+          </Link>
         </div>
 
         <div style={{ display: "flex", gap: "1rem", color: "#fff" }}>
-          <Link href="/profile" style={{ borderBottom: isActive("/profile") ? "2px solid white" : "none" }}>Profil</Link>
-          <Link href="/settings" style={{ borderBottom: isActive("/settings") ? "2px solid white" : "none" }}>Paramètres</Link>
-          <Link href="/login" style={{ borderBottom: isActive("/login") ? "2px solid white" : "none" }}>Déconnexion</Link>
+          <Link
+            href="/account"
+            style={{
+              borderBottom: isActive("/account") ? "2px solid white" : "none",
+            }}
+          >
+            Compte
+          </Link>
+          <Link
+            href="/settings"
+            style={{
+              borderBottom: isActive("/settings") ? "2px solid white" : "none",
+            }}
+          >
+            Paramètres
+          </Link>
+          <Link
+            href="/login"
+            style={{
+              borderBottom: isActive("/login") ? "2px solid white" : "none",
+            }}
+          >
+            Déconnexion
+          </Link>
         </div>
       </nav>
     </header>

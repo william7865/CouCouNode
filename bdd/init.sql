@@ -138,6 +138,44 @@ CREATE TABLE Watchlists (
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Créer la fonction trigger pour ajouter un abonnement par défaut lors de la création d'un utilisateur
+CREATE OR REPLACE FUNCTION create_default_subscription()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO Subscriptions (user_id, plan, price, status) 
+    VALUES (NEW.id, 'free trial', 0, 'active');
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Créer le trigger après insertion d'un utilisateur
+DROP TRIGGER IF EXISTS create_subscription_after_user_insert ON Users;
+CREATE TRIGGER create_subscription_after_user_insert
+AFTER INSERT ON Users
+FOR EACH ROW
+EXECUTE FUNCTION create_default_subscription();
+
+-- Fonction pour limiter le nombre de profils par utilisateur à 3
+CREATE OR REPLACE FUNCTION limit_profiles_per_user()
+RETURNS TRIGGER AS $$
+DECLARE
+    profile_count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO profile_count FROM Profiles WHERE user_id = NEW.user_id;
+    IF profile_count >= 2 THEN
+         RAISE EXCEPTION 'Un utilisateur ne peut créer que 2 profiles maximum';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger pour appliquer la limite lors d'une insertion dans Profiles
+DROP TRIGGER IF EXISTS limit_profiles_trigger ON Profiles;
+CREATE TRIGGER limit_profiles_trigger
+BEFORE INSERT ON Profiles
+FOR EACH ROW
+EXECUTE FUNCTION limit_profiles_per_user();
+
 -- Insertion d'un compte admin
 INSERT INTO Users (email, password, full_name, role)
 VALUES ('admin@example.com', '$2b$10$qxqMRCkBr5ATk1E7vbkp9uVSDY7xmWoCrwSPclG.BlYZkrUx9FfrW', 'Administrateur', 'admin');
