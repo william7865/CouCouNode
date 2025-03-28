@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const User = require("./models/user");
 const Movie = require("./models/movie");
+const Serie = require("./models/serie"); // Assurez-vous d'importer le modèle Serie
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -86,9 +87,21 @@ app.post("/movies", async (req, res) => {
 // ROUTE : Récupérer les films
 app.get("/movies", async (req, res) => {
   try {
-    const movies = await Movie.getAllMovies(); // Assurez-vous que cette méthode existe dans votre modèle Movie
+    const movies = await Movie.getAllMovies();
     res.json(movies);
   } catch (error) {
+    console.error("Erreur lors de la récupération des films :", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ROUTE : Récupérer les séries
+app.get("/series", async (req, res) => {
+  try {
+    const getSeries = await Serie.getAllSeries();
+    res.json(getSeries);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des séries :", error);
     res.status(500).json({ error: error.message });
   }
 });
