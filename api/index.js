@@ -88,7 +88,7 @@ app.post("/movies", async (req, res) => {
 
 app.get("/movies", async (req, res) => {
   try {
-    const movies = await Movie.getAllMovies(); // Assurez-vous que cette méthode existe dans le modèle Movie
+    const movies = await Movie.getAllMovies(); // Renvoie tous les films sans tri
     res.json(movies);
   } catch (error) {
     console.error("Erreur lors de la récupération des films :", error);
