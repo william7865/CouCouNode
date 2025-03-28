@@ -15,6 +15,13 @@ class Movie {
     return result.rows;
   }
 
+  static async getAllMoviesByOrder() {
+    const result = await pool.query(
+      "SELECT * FROM movies ORDER BY release_year DESC"
+    );
+    return result.rows;
+  }
+
   static async getMovieById(id) {
     const result = await pool.query("SELECT * FROM movies WHERE id = $1", [id]);
     return result.rows[0];

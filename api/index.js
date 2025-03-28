@@ -85,9 +85,10 @@ app.post("/movies", async (req, res) => {
 });
 
 // ROUTE : Récupérer les films
+
 app.get("/movies", async (req, res) => {
   try {
-    const movies = await Movie.getAllMovies();
+    const movies = await Movie.getAllMovies(); // Assurez-vous que cette méthode existe dans le modèle Movie
     res.json(movies);
   } catch (error) {
     console.error("Erreur lors de la récupération des films :", error);
