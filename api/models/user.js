@@ -25,6 +25,52 @@ class User {
     ]);
     return result.rows[0];
   }
+
+  static async getUserById(id) {
+    const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [id]);
+    return result.rows[0];
+  }
+
+  static async updateUser(
+    id,
+    { email, full_name, birth_date, password, newPassword }
+  ) {
+    let updatedPassword = null;
+    // Si un changement de mot de passe est demandé, vérifier le mot de passe actuel
+    if (newPassword) {
+      if (!password) {
+        throw new Error(
+          "Mot de passe actuel requis pour changer le mot de passe."
+        );
+      }
+      const user = await this.getUserById(id);
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        throw new Error("Mot de passe actuel incorrect.");
+      }
+      updatedPassword = await bcrypt.hash(newPassword, 10);
+    }
+    const result = await pool.query(
+      `UPDATE users 
+       SET email = $1, 
+           full_name = $2, 
+           birth_date = $3, 
+           password = COALESCE($4, password), 
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5 
+       RETURNING *`,
+      [email, full_name, birth_date, updatedPassword, id]
+    );
+    return result.rows[0];
+  }
+
+  static async deleteUser(id) {
+    const result = await pool.query(
+      `DELETE FROM users WHERE id = $1 RETURNING *`,
+      [id]
+    );
+    return result.rows[0];
+  }
 }
 
 module.exports = User;
