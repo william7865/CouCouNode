@@ -92,8 +92,9 @@ CREATE TABLE Movies (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     release_year INTEGER,
+    user_id INT REFERENCES Users(id) ON DELETE SET NULL,
     genre_id INT REFERENCES Genres(id) ON DELETE SET NULL,
-    image_url VARCHAR(255),  -- Ajouter le champ image_url pour les films
+    image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

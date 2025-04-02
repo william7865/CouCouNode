@@ -27,13 +27,7 @@ class Movie {
     return result.rows[0];
   }
 
-  static async createMovie({
-    title,
-    description,
-    release_year,
-    user_id,
-    last_active,
-  }) {
+  static async createMovie({ title, description, release_year, user_id }) {
     const result = await pool.query(
       "INSERT INTO movies (title, description, release_year, user_id, last_active) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [title, description, release_year, user_id, last_active]

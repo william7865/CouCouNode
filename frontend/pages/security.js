@@ -16,16 +16,16 @@ export default function Security() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Récupérer le profil de l'utilisateur
+  // Récupérer le compte de l'utilisateur via l'endpoint "/account"
   useEffect(() => {
-    async function fetchProfile() {
+    async function fetchAccount() {
       const token = localStorage.getItem("token");
       if (!token) {
         router.push("/login");
         return;
       }
       try {
-        const response = await fetch("http://localhost:3001/profile", {
+        const response = await fetch("http://localhost:3001/account", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ export default function Security() {
         });
         const data = await response.json();
         if (!response.ok) {
-          setError(data.error || "Erreur lors de la récupération du profil");
+          setError(data.error || "Erreur lors de la récupération du compte");
         } else {
           setUser(data.user);
           setUpdatedInfo({
@@ -48,7 +48,7 @@ export default function Security() {
         setError("Erreur lors de la récupération des données.");
       }
     }
-    fetchProfile();
+    fetchAccount();
   }, [router]);
 
   const handleChange = (e) => {
@@ -56,7 +56,7 @@ export default function Security() {
     setUpdatedInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Soumettre les modifications de sécurité
+  // Soumettre les modifications du compte via l'endpoint "/account"
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -64,7 +64,6 @@ export default function Security() {
       router.push("/login");
       return;
     }
-    // Vérifier le cas d'une modification du mot de passe
     if (updatedInfo.newPassword && !updatedInfo.password) {
       setError(
         "Merci de renseigner votre mot de passe actuel pour changer de mot de passe."
@@ -72,7 +71,7 @@ export default function Security() {
       return;
     }
     try {
-      const response = await fetch("http://localhost:3001/profile", {
+      const response = await fetch("http://localhost:3001/account", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +86,6 @@ export default function Security() {
         );
       } else {
         setMessage("Informations mises à jour avec succès !");
-        // Actualiser le profil avec les nouvelles informations
         setUser(data.user);
         setUpdatedInfo({
           email: data.user.email || "",
@@ -105,9 +103,8 @@ export default function Security() {
   if (!user) {
     return (
       <>
-        <Header />
         <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-          Chargement du profil...
+          Chargement du compte...
         </div>
       </>
     );
@@ -115,72 +112,112 @@ export default function Security() {
 
   return (
     <>
-      <Header />
       <div className="min-h-screen bg-black text-white p-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold mb-6">Sécurité</h1>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          {message && <p className="text-green-500 mb-4">{message}</p>}
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block mb-2">Email</label>
-              <input
-                type="email"
-                name="email"
-                value={updatedInfo.email}
-                onChange={handleChange}
-                className="w-full p-2 rounded bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Nom complet</label>
-              <input
-                type="text"
-                name="full_name"
-                value={updatedInfo.full_name}
-                onChange={handleChange}
-                className="w-full p-2 rounded bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Date de naissance</label>
-              <input
-                type="date"
-                name="birth_date"
-                value={updatedInfo.birth_date}
-                onChange={handleChange}
-                className="w-full p-2 rounded bg-gray-700 text-white"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Mot de passe actuel</label>
-              <input
-                type="password"
-                name="password"
-                value={updatedInfo.password}
-                onChange={handleChange}
-                className="w-full p-2 rounded bg-gray-700 text-white"
-                placeholder="Votre mot de passe actuel"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Nouveau mot de passe</label>
-              <input
-                type="password"
-                name="newPassword"
-                value={updatedInfo.newPassword}
-                onChange={handleChange}
-                className="w-full p-2 rounded bg-gray-700 text-white"
-                placeholder="Votre nouveau mot de passe"
-              />
-            </div>
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl font-bold mb-8 text-red-600">Streamflix</h1>
+          <div className="mb-8">
             <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              className="text-gray-300 hover:text-white"
+              onClick={() => router.push("/")}
             >
-              Mettre à jour
+              ← Retour à Streamflix
             </button>
-          </form>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div className="col-span-1">
+              <h2 className="text-xl font-bold mb-4">Présentation</h2>
+              <ul className="space-y-2 text-gray-400">
+                <li
+                  className="hover:text-white cursor-pointer"
+                  onClick={() => router.push("/account")}
+                >
+                  Abonnement
+                </li>
+                <li
+                  className="hover:text-white cursor-pointer"
+                  onClick={() => router.push("/devices")}
+                >
+                  Appareils
+                </li>
+                <li
+                  className="hover:text-white cursor-pointer"
+                  onClick={() => router.push("/profiles")}
+                >
+                  Profils
+                </li>
+              </ul>
+            </div>
+            <div className="md:col-span-3">
+              <h1 className="text-4xl font-bold mb-2">Sécurité</h1>
+              <p className="mb-6 text-gray-400">
+                Gérez les informations de votre compte en toute sécurité. Vous
+                pouvez mettre à jour votre email, nom complet, date de naissance
+                et mot de passe.
+              </p>
+              {error && <p className="text-red-500 mb-4">{error}</p>}
+              {message && <p className="text-green-500 mb-4">{message}</p>}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="block mb-2">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={updatedInfo.email}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2">Nom complet</label>
+                  <input
+                    type="text"
+                    name="full_name"
+                    value={updatedInfo.full_name}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2">Date de naissance</label>
+                  <input
+                    type="date"
+                    name="birth_date"
+                    value={updatedInfo.birth_date}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2">Mot de passe actuel</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={updatedInfo.password}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                    placeholder="Votre mot de passe actuel"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2">Nouveau mot de passe</label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={updatedInfo.newPassword}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                    placeholder="Votre nouveau mot de passe"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                >
+                  Mettre à jour
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </>
