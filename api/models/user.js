@@ -31,6 +31,12 @@ class User {
     return result.rows[0];
   }
 
+  // Méthode pour récupérer la liste de tous les utilisateurs
+  static async getAllUsers() {
+    const result = await pool.query(`SELECT * FROM users`);
+    return result.rows;
+  }
+
   static async updateUser(
     id,
     { email, full_name, birth_date, password, newPassword }

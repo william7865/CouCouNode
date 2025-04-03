@@ -7,102 +7,7 @@ export default function Account() {
   const [subscriptionStatus, setSubscriptionStatus] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [genres, setGenres] = useState([]);
-  const [movie, setMovie] = useState({
-    title: "",
-    description: "",
-    release_year: "",
-    genre_id: "",
-    image_url: "",
-  });
-  const [serie, setSerie] = useState({
-    title: "",
-    description: "",
-    detailed_description: "",
-    release_year: "",
-    rating: "",
-    genre_id: "",
-    image_url: "",
-  });
-  const [serieMessage, setSerieMessage] = useState("");
-  const [movieMessage, setMovieMessage] = useState("");
   const router = useRouter();
-
-  const handleSerieChange = (e) => {
-    setSerie({
-      ...serie,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleAddSerie = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch("http://localhost:3001/series", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(serie),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        setSerieMessage(data.error || "Erreur lors de l'ajout de la série.");
-      } else {
-        setSerieMessage("Série ajoutée avec succès !");
-        setSerie({
-          title: "",
-          description: "",
-          detailed_description: "",
-          release_year: "",
-          rating: "",
-          genre_id: "",
-          image_url: "",
-        });
-      }
-    } catch (err) {
-      setSerieMessage("Erreur lors de l'ajout de la série.");
-    }
-  };
-
-  const handleMovieChange = (e) => {
-    setMovie({
-      ...movie,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleAddMovie = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch("http://localhost:3001/movies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(movie),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        setMovieMessage(data.error || "Erreur lors de l'ajout du film.");
-      } else {
-        setMovieMessage("Film ajouté avec succès !");
-        setMovie({
-          title: "",
-          description: "",
-          release_year: "",
-          genre_id: "",
-          image_url: "",
-        });
-      }
-    } catch (err) {
-      setMovieMessage("Erreur lors de l'ajout du film.");
-    }
-  };
 
   // Récupération des informations du compte
   useEffect(() => {
@@ -135,24 +40,6 @@ export default function Account() {
     fetchAccount();
   }, [router]);
 
-  // Récupération des genres
-  useEffect(() => {
-    async function fetchGenres() {
-      try {
-        const response = await fetch("http://localhost:3001/genres");
-        if (response.ok) {
-          const data = await response.json();
-          setGenres(data);
-        } else {
-          console.error("Erreur lors de la récupération des genres");
-        }
-      } catch (err) {
-        console.error("Erreur lors de la récupération des genres", err);
-      }
-    }
-    fetchGenres();
-  }, []);
-
   // Récupération du statut de l'abonnement
   useEffect(() => {
     async function fetchSubscription() {
@@ -182,6 +69,36 @@ export default function Account() {
     }
   }, [user]);
 
+  // Fonction pour annuler l'abonnement
+  const handleCancelSubscription = async () => {
+    if (window.confirm("Voulez-vous vraiment annuler votre abonnement ?")) {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          "http://localhost:3001/subscription/cancel",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          alert(data.error || "Erreur lors de l'annulation de l'abonnement.");
+        } else {
+          alert("Votre abonnement a été annulé.");
+          // Mise à jour du statut ou redirection
+          setSubscriptionStatus("Annulé");
+        }
+      } catch (err) {
+        console.error("Erreur lors de l'annulation de l'abonnement:", err);
+        alert("Erreur lors de l'annulation de l'abonnement.");
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -205,7 +122,7 @@ export default function Account() {
           src="/images/logo-streamflix.png"
           alt="Streamflix"
           onClick={() => router.push("/")}
-          className="h-16 w-40 object-contain transform scale-300 cursor-pointer"
+          className="h-16 w-40 cursor-pointer"
         />
 
         <div className="mb-8">
@@ -272,9 +189,14 @@ export default function Account() {
               <p className="text-gray-400 mb-4">
                 Compte de l'utilisateur : {user.email}
               </p>
-              <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
-                Gérer l'abonnement
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={handleCancelSubscription}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+                >
+                  Annuler l'abonnement
+                </button>
+              </div>
             </div>
 
             <div>

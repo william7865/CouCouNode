@@ -204,7 +204,7 @@ export default function Profiles() {
           src="/images/logo-streamflix.png"
           alt="Streamflix"
           onClick={() => router.push("/")}
-          className="h-16 w-40 object-contain transform scale-300 cursor-pointer"
+          className="h-16 w-40 cursor-pointer"
         />
         <div className="mb-8">
           <button
@@ -388,7 +388,6 @@ export default function Profiles() {
                             onClick={() => handleDeleteProfile(profile.id)}
                             className="mt-2 bg-gray-700 hover:bg-gray-600 text-white px-2 py-2 rounded"
                           >
-                            {/* Icône de suppression (corbeille) */}
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               className="h-5 w-5"

@@ -15,7 +15,7 @@ export default function Security() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Récupérer le compte de l'utilisateur via l'endpoint "/account"
+  // Récupérer le compte de l'utilisateur
   useEffect(() => {
     async function fetchAccount() {
       const token = localStorage.getItem("token");
@@ -117,7 +117,7 @@ export default function Security() {
             src="/images/logo-streamflix.png"
             alt="Streamflix"
             onClick={() => router.push("/")}
-            className="h-16 w-40 object-contain transform scale-300 cursor-pointer"
+            className="h-16 w-40 cursor-pointer"
           />
           <div className="mb-8">
             <button
