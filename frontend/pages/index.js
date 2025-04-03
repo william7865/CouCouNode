@@ -76,7 +76,7 @@ export default function Home() {
             </span>
           </h1>
         </div>
-        <div className="container mx-auto px-4 py-8 relative z-10 bg-black/90 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-8 relative z-10  backdrop-blur-sm">
           {/* Section Films */}
           <div className="mb-16">
             <div className="flex items-baseline gap-4 mb-8">

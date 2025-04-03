@@ -330,6 +330,20 @@ app.get("/movies", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+//ROUTE : Supprimer un film
+app.delete("/movies/:id", async (req, res) => {
+  try {
+    const movieId = req.params.id;
+    const deletedMovie = await Movie.deleteMovie(movieId);
+    if (!deletedMovie) {
+      return res.status(404).json({ error: "Film non trouvé" });
+    }
+    res.json({ message: "Film supprimé avec succès", movie: deletedMovie });
+  } catch (error) {
+    console.error("Erreur lors de la suppression du film :", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 // ROUTE : Récupérer les genres
 app.get("/genres", async (req, res) => {
   try {
