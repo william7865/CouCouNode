@@ -25,10 +25,10 @@ export default function Header() {
       <nav className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-8">
           <img
-            src="/logo.png"
+            src="/images/logo-streamflix.png"
             alt="Streamflix"
             onClick={() => router.push("/")}
-            className="h-8 w-32 object-contain"
+            className="h-12 w-48 object-contain transform scale-200 cursor-pointer"
           />
 
           <div className="flex gap-6 text-white">
