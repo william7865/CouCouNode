@@ -215,10 +215,11 @@ app.get("/subscription", async (req, res) => {
 // ROUTE : Créer un film
 app.post("/movies", async (req, res) => {
   try {
+    console.log("Requête reçue dans /movies :", req.body);
     const newMovie = await Movie.createMovie(req.body);
     res.status(201).json(newMovie);
   } catch (err) {
-    console.error("Erreur lors de l'ajout du film :", err);
+    console.error("Erreur lors de l'ajout du film :", err.message);
     res.status(500).json({ error: "Erreur lors de l'ajout du film." });
   }
 });
