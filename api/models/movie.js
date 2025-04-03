@@ -28,11 +28,24 @@ class Movie {
     last_active,
     image_url,
   }) {
-    const result = await pool.query(
-      "INSERT INTO movies (title, description, release_year, user_id, last_active, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [title, description, release_year, user_id, last_active, image_url]
-    );
-    return result.rows[0];
+    try {
+      console.log("Données reçues pour createMovie :", {
+        title,
+        description,
+        release_year,
+        user_id,
+        last_active,
+        image_url,
+      });
+      const result = await pool.query(
+        "INSERT INTO movies (title, description, release_year, user_id, last_active, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+        [title, description, release_year, user_id, last_active, image_url]
+      );
+      return result.rows[0];
+    } catch (err) {
+      console.error("Erreur dans createMovie :", err.message);
+      throw err;
+    }
   }
 
   static async updateMovie(
