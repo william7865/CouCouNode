@@ -156,7 +156,6 @@ export default function Profiles() {
   if (loading) {
     return (
       <>
-        <Header />
         <div className="flex items-center justify-center min-h-screen bg-black text-white">
           Chargement...
         </div>

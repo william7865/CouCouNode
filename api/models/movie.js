@@ -32,22 +32,53 @@ class Movie {
     description,
     release_year,
     user_id,
+    genre_id,
+    image_url,
     last_active,
   }) {
     const result = await pool.query(
-      "INSERT INTO movies (title, description, release_year, user_id, last_active) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [title, description, release_year, user_id, last_active]
+      `INSERT INTO movies 
+       (title, description, release_year, user_id, genre_id, image_url, last_active) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [
+        title,
+        description,
+        release_year,
+        user_id,
+        genre_id,
+        image_url,
+        last_active,
+      ]
     );
     return result.rows[0];
   }
 
   static async updateMovie(
     id,
-    { title, description, release_year, user_id, last_active }
+    {
+      title,
+      description,
+      release_year,
+      user_id,
+      genre_id,
+      image_url,
+      last_active,
+    }
   ) {
     const result = await pool.query(
-      "UPDATE movies SET title = $1, description = $2, release_year = $3, user_id = $4, last_active = $5 WHERE id = $6 RETURNING *",
-      [title, description, release_year, user_id, last_active, id]
+      `UPDATE movies 
+       SET title = $1, description = $2, release_year = $3, user_id = $4, genre_id = $5, image_url = $6, last_active = $7 
+       WHERE id = $8 RETURNING *`,
+      [
+        title,
+        description,
+        release_year,
+        user_id,
+        genre_id,
+        image_url,
+        last_active,
+        id,
+      ]
     );
     return result.rows[0];
   }
@@ -60,6 +91,7 @@ class Movie {
     const result = await pool.query("SELECT * FROM movies WHERE genre = $1", [
       genre,
     ]);
+    return result.rows;
   }
 }
 

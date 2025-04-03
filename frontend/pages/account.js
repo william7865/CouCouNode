@@ -8,11 +8,65 @@ export default function Account() {
   const [subscriptionStatus, setSubscriptionStatus] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [genres, setGenres] = useState([]);
   const [movie, setMovie] = useState({
     title: "",
     description: "",
     release_year: "",
+    genre_id: "",
+    image_url: "",
   });
+
+  const [serie, setSerie] = useState({
+    title: "",
+    description: "",
+    detailed_description: "",
+    release_year: "",
+    rating: "",
+    genre_id: "",
+    image_url: "",
+  });
+
+  const [serieMessage, setSerieMessage] = useState("");
+
+  const handleSerieChange = (e) => {
+    setSerie({
+      ...serie,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddSerie = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:3001/series", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(serie),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setSerieMessage(data.error || "Erreur lors de l'ajout de la série.");
+      } else {
+        setSerieMessage("Série ajoutée avec succès !");
+        setSerie({
+          title: "",
+          description: "",
+          detailed_description: "",
+          release_year: "",
+          rating: "",
+          genre_id: "",
+          image_url: "",
+        });
+      }
+    } catch (err) {
+      setSerieMessage("Erreur lors de l'ajout de la série.");
+    }
+  };
   const [movieMessage, setMovieMessage] = useState("");
   const router = useRouter();
 
@@ -46,6 +100,24 @@ export default function Account() {
     fetchAccount();
   }, [router]);
 
+  // Récupérer la liste des genres
+  useEffect(() => {
+    async function fetchGenres() {
+      try {
+        const response = await fetch("http://localhost:3001/genres");
+        if (response.ok) {
+          const data = await response.json();
+          setGenres(data);
+        } else {
+          console.error("Erreur lors de la récupération des genres");
+        }
+      } catch (err) {
+        console.error("Erreur lors de la récupération des genres", err);
+      }
+    }
+    fetchGenres();
+  }, []);
+
   // Gestion du changement dans les champs du formulaire
   const handleMovieChange = (e) => {
     setMovie({
@@ -76,6 +148,8 @@ export default function Account() {
           title: "",
           description: "",
           release_year: "",
+          genre_id: "",
+          image_url: "",
         });
       }
     } catch (err) {
@@ -83,7 +157,7 @@ export default function Account() {
     }
   };
 
-  //Récupérer le statut de l'abonnement
+  // Récupérer le statut de l'abonnement
   useEffect(() => {
     async function fetchSubscription() {
       const token = localStorage.getItem("token");
@@ -237,57 +311,287 @@ export default function Account() {
           </div>
 
           {user.role === "admin" && (
-            <div className="bg-gray-800 p-6 rounded-lg mt-8">
-              <h2 className="text-xl font-bold mb-4">Ajouter un film</h2>
-              <form onSubmit={handleAddMovie}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div className="bg-gray-800 p-8 rounded-lg mt-8 border border-gray-700">
+              <h2 className="text-2xl font-bold mb-6">
+                Ajouter un nouveau contenu
+              </h2>
+
+              {/* Formulaire pour ajouter un film */}
+              <form onSubmit={handleAddMovie} className="space-y-6 mb-8">
+                <h3 className="text-xl font-semibold mb-4">Ajouter un film</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Colonne gauche */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Titre du film
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={movie.title}
+                        onChange={handleMovieChange}
+                        className="w-full px-4 py-2.5 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        placeholder="Titre original"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Année de sortie
+                      </label>
+                      <input
+                        type="number"
+                        name="release_year"
+                        value={movie.release_year}
+                        onChange={handleMovieChange}
+                        className="w-full px-4 py-2.5 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        min="1900"
+                        max="2100"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Genre
+                      </label>
+                      <select
+                        name="genre_id"
+                        value={movie.genre_id}
+                        onChange={handleMovieChange}
+                        className="w-full px-4 py-2.5 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        required
+                      >
+                        <option value="">Sélectionner un genre</option>
+                        {genres.map((genre) => (
+                          <option key={genre.id} value={genre.id}>
+                            {genre.genre_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {/* Colonne droite */}
                   <div>
-                    <label className="block mb-2 text-gray-400">Titre</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Aperçu de l'image
+                    </label>
+                    <div className="aspect-w-2 aspect-h-3 bg-gray-900 rounded-lg border-dashed border border-gray-700 overflow-hidden">
+                      {movie.image_url ? (
+                        <img
+                          src={movie.image_url}
+                          alt="Aperçu"
+                          className="object-cover w-full h-full"
+                          onError={(e) =>
+                            (e.target.src =
+                              "https://via.placeholder.com/300x450?text=Image+non+disponible")
+                          }
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                          <svg
+                            className="w-12 h-12 mb-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          <span className="text-sm">URL de l'affiche</span>
+                        </div>
+                      )}
+                    </div>
                     <input
                       type="text"
-                      name="title"
-                      value={movie.title}
+                      name="image_url"
+                      value={movie.image_url}
                       onChange={handleMovieChange}
-                      className="w-full p-2 rounded bg-gray-700 text-white"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2 text-gray-400">
-                      Année de sortie
-                    </label>
-                    <input
-                      type="number"
-                      name="release_year"
-                      value={movie.release_year}
-                      onChange={handleMovieChange}
-                      className="w-full p-2 rounded bg-gray-700 text-white"
-                      required
+                      className="mt-2 w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                      placeholder="Coller le lien de l'image ici"
                     />
                   </div>
                 </div>
-                <div className="mb-4">
-                  <label className="block mb-2 text-gray-400">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Description
                   </label>
                   <textarea
                     name="description"
                     value={movie.description}
                     onChange={handleMovieChange}
-                    className="w-full p-2 rounded bg-gray-700 text-white"
-                    required
+                    className="w-full px-4 py-2.5 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
                     rows="4"
+                    placeholder="Synopsis..."
+                    required
                   ></textarea>
                 </div>
+                {movieMessage && (
+                  <div className="text-sm text-gray-400">{movieMessage}</div>
+                )}
                 <button
                   type="submit"
-                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+                  className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
                 >
-                  Ajouter le film
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Publier le film
                 </button>
-                {movieMessage && (
-                  <p className="mt-4 text-red-400">{movieMessage}</p>
+              </form>
+
+              {/* Formulaire pour ajouter une série */}
+              <form onSubmit={handleAddSerie} className="space-y-6">
+                <h3 className="text-xl font-semibold mb-4">
+                  Ajouter une série
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Colonne gauche */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Titre de la série
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        value={serie.title}
+                        onChange={handleSerieChange}
+                        className="w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        placeholder="Titre original"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Année de sortie
+                      </label>
+                      <input
+                        type="number"
+                        name="release_year"
+                        value={serie.release_year}
+                        onChange={handleSerieChange}
+                        className="w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        min="1900"
+                        max="2100"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Genre
+                      </label>
+                      <select
+                        name="genre_id"
+                        value={serie.genre_id}
+                        onChange={handleSerieChange}
+                        className="w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                        required
+                      >
+                        <option value="">Sélectionner un genre</option>
+                        {genres.map((genre) => (
+                          <option key={genre.id} value={genre.id}>
+                            {genre.genre_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {/* Colonne droite */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Aperçu de l'image
+                    </label>
+                    <div className="aspect-w-2 aspect-h-3 bg-gray-900 rounded-lg border-dashed border border-gray-700 overflow-hidden">
+                      {serie.image_url ? (
+                        <img
+                          src={serie.image_url}
+                          alt="Aperçu"
+                          className="object-cover w-full h-full"
+                          onError={(e) =>
+                            (e.target.src =
+                              "https://via.placeholder.com/300x450?text=Image+non+disponible")
+                          }
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                          <svg
+                            className="w-12 h-12 mb-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          <span className="text-sm">URL de l'affiche</span>
+                        </div>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      name="image_url"
+                      value={serie.image_url}
+                      onChange={handleSerieChange}
+                      className="mt-2 w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                      placeholder="Coller le lien de l'image ici"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    value={serie.description}
+                    onChange={handleSerieChange}
+                    className="w-full px-4 py-2 bg-gray-900 rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600"
+                    rows="4"
+                    placeholder="Synopsis de la série..."
+                    required
+                  ></textarea>
+                </div>
+                {serieMessage && (
+                  <div className="text-sm text-gray-400">{serieMessage}</div>
                 )}
+                <button
+                  type="submit"
+                  className="flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition-colors"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Publier la série
+                </button>
               </form>
             </div>
           )}

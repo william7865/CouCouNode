@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const User = require("./models/user");
 const Movie = require("./models/movie");
+const Genre = require("./models/genre");
 const Serie = require("./models/serie");
 const Profile = require("./models/profile");
 const Subscription = require("./models/subscription");
@@ -232,7 +233,26 @@ app.get("/movies", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+// ROUTE : Récupérer les genres
+app.get("/genres", async (req, res) => {
+  try {
+    const genres = await Genre.getAllGenres();
+    res.json(genres);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des genres :", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+// ROUTE : Créer une série
+app.post("/series", async (req, res) => {
+  try {
+    const newSerie = await Serie.createSeries(req.body);
+    res.status(201).json(newSerie);
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la série :", error);
+    res.status(500).json({ error: "Erreur lors de l'ajout de la série." });
+  }
+});
 // ROUTE : Récupérer les séries
 app.get("/series", async (req, res) => {
   try {
