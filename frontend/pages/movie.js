@@ -11,6 +11,23 @@ export default function MoviePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState("Tous");
+
+  // Options de genres pour le filtrage
+  const genreOptions = [
+    "Tous",
+    "Action",
+    "Comédie",
+    "Drame",
+    "Science-fiction",
+  ];
+  // Association des identifiants aux libellés
+  const genreLabels = {
+    1: "Action",
+    2: "Comédie",
+    3: "Drame",
+    4: "Science-fiction",
+  };
 
   useEffect(() => {
     if (!token) {
@@ -45,15 +62,32 @@ export default function MoviePage() {
     fetchMovies();
   }, [token, router]);
 
+  // Déterminer le film le plus récent possédant une année et une image
   const mostRecentMovie = movies
-    .filter((movie) => movie.release_year && movie.image_url) // Filtrer les films avec une année et une image valides
+    .filter((movie) => movie.release_year && movie.image_url)
     .reduce((latest, movie) => {
       return !latest || movie.release_year > latest.release_year
         ? movie
         : latest;
     }, null);
 
-  console.log("Film le plus récent :", mostRecentMovie);
+  // Filtrer les films en fonction du genre sélectionné
+  const filteredMovies = movies.filter(
+    (movie) =>
+      selectedGenre === "Tous" || genreLabels[movie.genre_id] === selectedGenre
+  );
+
+  const handlePrevClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? filteredMovies.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextClick = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === filteredMovies.length - 1 ? 0 : prevIndex + 1
+    );
+  };
 
   if (!token) {
     return (
@@ -78,18 +112,6 @@ export default function MoviePage() {
       </div>
     );
   }
-
-  const handlePrevClick = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? movies.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleNextClick = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-    );
-  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -117,13 +139,13 @@ export default function MoviePage() {
                 className="absolute inset-0 bg-opacity-60 flex flex-col justify-center items-start p-6 ml-10"
                 style={{ zIndex: 2 }}
               >
-                <h2 className="text-5xl font-bold text-white mb-6 ">
+                <h2 className="text-5xl font-bold text-white mb-6">
                   {mostRecentMovie.title}
                 </h2>
-                <p className="text-white text-lg mb-6 max-w-2xl ">
+                <p className="text-white text-lg mb-6 max-w-2xl">
                   {mostRecentMovie.description}
                 </p>
-                <p className="text-white-300 mb-6k">
+                <p className="text-white mb-6">
                   <strong>Année de sortie :</strong>{" "}
                   {mostRecentMovie.release_year}
                 </p>
@@ -138,8 +160,33 @@ export default function MoviePage() {
           </div>
         )}
 
-        {/* Carrousel des films */}
-        {movies.length > 0 && (
+        {/* Section de filtrage par genre */}
+        <div className="mb-8">
+          <h3 className="text-3xl font-bold text-white mb-4">
+            Filtrer par genre
+          </h3>
+          <div className="flex gap-4">
+            {genreOptions.map((genre) => (
+              <button
+                key={genre}
+                onClick={() => {
+                  setSelectedGenre(genre);
+                  setCurrentIndex(0); // Réinitialiser le carrousel lors du changement
+                }}
+                className={`px-4 py-2 rounded-full transition-all ${
+                  selectedGenre === genre
+                    ? "bg-neon-400 text-space-900 font-bold"
+                    : "bg-space-700 hover:bg-space-600"
+                }`}
+              >
+                {genre}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Carrousel des films filtrés */}
+        {filteredMovies.length > 0 ? (
           <div className="relative max-w-5xl mx-auto mb-8">
             <h3 className="text-3xl font-bold text-white mb-6">
               Films préférés
@@ -156,7 +203,7 @@ export default function MoviePage() {
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
-                {movies.map((movie) => (
+                {filteredMovies.map((movie) => (
                   <div
                     key={movie.id}
                     className="min-w-full sm:min-w-[50%] lg:min-w-[25%] xl:min-w-[20%] p-4"
@@ -168,7 +215,7 @@ export default function MoviePage() {
                           alt={movie.title}
                           className="w-full h-48 object-cover rounded-t-lg"
                           onError={(e) => {
-                            e.target.src = "https://picsum.photos/300/200";
+                            e.target.src = "https://picsum.photos/200/300";
                           }}
                         />
                       ) : (
@@ -206,22 +253,24 @@ export default function MoviePage() {
               </button>
             </div>
           </div>
+        ) : (
+          <p className="text-gray-400 text-center">
+            Aucun film trouvé pour ce genre.
+          </p>
         )}
 
-        {/* Sections par genre */}
+        {/* Sections par genre (affichage complémentaire, si souhaité) */}
         {[1, 2, 3, 4].map((genreId) => {
           const genreMovies = movies.filter(
             (movie) => movie.genre_id === genreId
           );
           if (genreMovies.length === 0) return null;
-
           const genreTitles = {
             1: "Action",
             2: "Comédie",
             3: "Drame",
             4: "Science-fiction",
           };
-
           return (
             <div key={genreId} className="mb-8">
               <h3 className="text-3xl font-bold text-white mb-6">
@@ -239,11 +288,11 @@ export default function MoviePage() {
                         alt={movie.title}
                         className="w-full h-48 object-cover rounded-t-lg"
                         onError={(e) => {
-                          e.target.src = "https://picsum.photos/300/200";
+                          e.target.src = "https://picsum.photos/200/300";
                         }}
                       />
                     ) : (
-                      <div className="w-full h-48 bg-gray-700 flex items-center justify-center">
+                      <div className="w-full h-48 bg-gray-700 flex items-center justify-center rounded-t-lg">
                         <span className="text-gray-400">Pas d'affiche</span>
                       </div>
                     )}
@@ -271,6 +320,7 @@ export default function MoviePage() {
           );
         })}
       </div>
+
       <Footer />
     </div>
   );

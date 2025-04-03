@@ -219,12 +219,38 @@ INSERT INTO Genres (genre_name) VALUES
 ('Science-fiction'), 
 ('Horreur');
 
--- Ajout de films avec image_url
+-- Films pour le genre Action
 INSERT INTO Movies (title, description, release_year, genre_id, image_url) VALUES 
-('Inception', 'Un voleur qui manipule les rêves doit accomplir une mission impossible.', 2010, 4, 'https://example.com/images/inception.jpg'), 
-('The Dark Knight', 'Batman affronte le Joker à Gotham City.', 2008, 1, 'https://example.com/images/dark_knight.jpg'), 
-('Interstellar', 'Un voyage spatial pour sauver l''humanité.', 2014, 4, 'https://example.com/images/interstellar.jpg'), 
-('Parasite', 'Une famille pauvre infiltre une famille riche.', 2019, 3, 'https://example.com/images/parasite.jpg');
+('The Dark Knight', 'Batman affronte le Joker dans une lutte pour sauver Gotham City.', 2008, 1, 'https://picsum.photos/200/300'),
+('Die Hard', 'Un policier se bat seul contre des terroristes dans un gratte-ciel.', 1988, 1, 'https://picsum.photos/200/300'),
+('Mad Max: Fury Road', 'Dans un monde post-apocalyptique, la survie est un combat quotidien.', 2015, 1, 'https://picsum.photos/200/300'),
+('John Wick', 'Un ancien tueur à gages reprend du service pour venger la mort de son chien.', 2014, 1, 'https://picsum.photos/200/300'),
+('Gladiator', 'Un général romain déchu se bat pour sa liberté et la vengeance.', 2000, 1, 'https://picsum.photos/200/300');
+
+-- Films pour le genre Comédie
+INSERT INTO Movies (title, description, release_year, genre_id, image_url) VALUES 
+('Superbad', 'Deux adolescents vivent des aventures hilarantes avant la fin du lycée.', 2007, 2, 'https://picsum.photos/200/300'),
+('The Hangover', 'Un enterrement de vie de garçon à Las Vegas tourne au chaos.', 2009, 2, 'https://picsum.photos/200/300'),
+('Step Brothers', 'Deux hommes immatures deviennent beaux-frères et doivent cohabiter.', 2008, 2, 'https://picsum.photos/200/300'),
+('Anchorman', 'Un présentateur de journal télévisé affronte la montée d’une concurrence inattendue.', 2004, 2, 'https://picsum.photos/200/300'),
+('Bridesmaids', 'Une demoiselle d''honneur traverse une série de mésaventures comiques.', 2011, 2, 'https://picsum.photos/200/300');
+
+-- Films pour le genre Drame
+INSERT INTO Movies (title, description, release_year, genre_id, image_url) VALUES 
+('Forrest Gump', 'L''histoire émouvante d''un homme simple aux destinées extraordinaires.', 1994, 3, 'https://picsum.photos/200/300'),
+('The Shawshank Redemption', 'L''amitié et l''espoir naissent dans une prison presque sans issue.', 1994, 3, 'https://picsum.photos/200/300'),
+('Fight Club', 'Un homme en quête de sens fonde un club de combat clandestin.', 1999, 3, 'https://picsum.photos/200/300'),
+('American Beauty', 'Une famille dysfonctionnelle dévoile les failles de la vie moderne.', 1999, 3, 'https://picsum.photos/200/300'),
+('The Godfather', 'La saga d''une famille mafieuse italienne aux États-Unis.', 1972, 3, 'https://picsum.photos/200/300');
+
+-- Films pour le genre Science-fiction
+INSERT INTO Movies (title, description, release_year, genre_id, image_url) VALUES 
+('Inception', 'Un voleur spécialisé dans l''infiltration des rêves se voit confier une mission impossible.', 2010, 4, 'https://picsum.photos/200/300'),
+('Interstellar', 'Des astronautes voyagent à travers un trou de ver pour trouver une nouvelle planète habitable.', 2014, 4, 'https://picsum.photos/200/300'),
+('Blade Runner 2049', 'Un nouvel inspecteur découvre un secret qui pourrait plonger la société dans le chaos.', 2017, 4, 'https://picsum.photos/200/300'),
+('The Matrix', 'Un pirate informatique découvre que la réalité est une simulation élaborée.', 1999, 4, 'https://picsum.photos/200/300'),
+('Arrival', 'Des linguistes tentent de communiquer avec des extraterrestres pour sauver l''humanité.', 2016, 4, 'https://picsum.photos/200/300');
+
 
 
 

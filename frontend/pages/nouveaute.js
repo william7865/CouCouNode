@@ -8,7 +8,6 @@ export default function NouveautePage() {
   const { token } = useContext(AuthContext);
   const router = useRouter();
   const [episodes, setEpisodes] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState("Tous");
   const [viewMode, setViewMode] = useState("grid");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,20 +29,14 @@ export default function NouveautePage() {
     fetchEpisodes();
   }, [token]);
 
-  // Fonctionnalités innovantes
-  const genres = ["Action", "Drame", "Comédie", "Sci-Fi", "Documentaire"];
-
-  const filteredEpisodes = episodes.filter(
-    (ep) =>
-      (selectedGenre === "Tous" || ep.genre === selectedGenre) &&
-      ep.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // Barre de recherche
+  const filteredEpisodes = episodes.filter((ep) =>
+    ep.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <div className="min-h-screen bg-black to-space-800 text-white">
       <Header />
-
-      {/* Section Hero Interactive */}
       <div className="relative h-[60vh] overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="animate-galaxy-rotate h-full w-full bg-[url('/galaxy-pattern.png')] bg-cover opacity-20" />
@@ -83,75 +76,53 @@ export default function NouveautePage() {
           </div>
         </div>
       </div>
-
-      {/* Contrôles Interactifs */}
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-wrap gap-6 items-center justify-between mb-12">
-          <div className="flex gap-4">
-            {genres.map((genre) => (
-              <button
-                key={genre}
-                onClick={() => setSelectedGenre(genre)}
-                className={`px-6 py-2 rounded-full transition-all ${
-                  selectedGenre === genre
-                    ? "bg-neon-400 text-space-900 font-bold"
-                    : "bg-space-700 hover:bg-space-600"
-                }`}
-              >
-                {genre}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-4">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`p-3 rounded-lg ${
-                viewMode === "grid"
-                  ? "bg-neon-400 text-space-900"
-                  : "bg-space-700"
-              }`}
+        <div className="flex gap-4 mb-12">
+          <button
+            onClick={() => setViewMode("grid")}
+            className={`p-3 rounded-lg ${
+              viewMode === "grid"
+                ? "bg-neon-400 text-space-900"
+                : "bg-space-700"
+            }`}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`p-3 rounded-lg ${
-                viewMode === "list"
-                  ? "bg-neon-400 text-space-900"
-                  : "bg-space-700"
-              }`}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`p-3 rounded-lg ${
+              viewMode === "list"
+                ? "bg-neon-400 text-space-900"
+                : "bg-space-700"
+            }`}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
-          </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
         </div>
-
-        {/* Affichage Dynamique */}
         {viewMode === "grid" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredEpisodes.map((episode) => (
@@ -243,9 +214,6 @@ export default function NouveautePage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-4 mb-2">
                     <h3 className="text-xl font-bold">{episode.title}</h3>
-                    <span className="text-neon-400 text-sm">
-                      {episode.genre}
-                    </span>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-gray-300 mb-3">
                     <span>{new Date(episode.date).toLocaleDateString()}</span>
@@ -263,7 +231,6 @@ export default function NouveautePage() {
           </div>
         )}
       </div>
-
       <Footer />
     </div>
   );
