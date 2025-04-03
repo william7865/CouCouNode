@@ -247,7 +247,7 @@ export default function Profiles() {
             </ul>
           </div>
           <div className="col-span-3">
-            <h2 className="text-2xl font-bold mb-6">Profils</h2>
+            <h2 className="text-4xl font-bold mb-2">Profils</h2>
             <div className="mb-8">
               <h3 className="text-lg font-semibold mb-4">
                 Contrôle parental et permissions

@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
 import Header from "./components/header";
+import Footer from "./components/footer";
 
 export default function MoviePage() {
   const { token } = useContext(AuthContext);
@@ -270,6 +271,7 @@ export default function MoviePage() {
           );
         })}
       </div>
+      <Footer />
     </div>
   );
 }
