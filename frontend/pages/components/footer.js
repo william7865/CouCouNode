@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 export default function Footer() {
   return (
@@ -11,23 +10,23 @@ export default function Footer() {
             <h6 className="text-white mb-4">Autobotsecrption</h6>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/investisseurs">
-                  <a className="hover:text-white">Relations investisseurs</a>
+                <Link href="/investisseurs" className="hover:text-white">
+                  Relations investisseurs
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialite">
-                  <a className="hover:text-white">Confidentialité</a>
+                <Link href="/confidentialite" className="hover:text-white">
+                  Confidentialité
                 </Link>
               </li>
               <li>
-                <Link href="/contact">
-                  <a className="hover:text-white">Nous contacter</a>
+                <Link href="/contact" className="hover:text-white">
+                  Nous contacter
                 </Link>
               </li>
               <li>
-                <Link href="/codeservice">
-                  <a className="hover:text-white">Code de service</a>
+                <Link href="/codeservice" className="hover:text-white">
+                  Code de service
                 </Link>
               </li>
             </ul>
@@ -37,23 +36,23 @@ export default function Footer() {
             <h6 className="text-white mb-4">Centre d'aide</h6>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/recrutement">
-                  <a className="hover:text-white">Recrutement</a>
+                <Link href="/recrutement" className="hover:text-white">
+                  Recrutement
                 </Link>
               </li>
               <li>
-                <Link href="/legales">
-                  <a className="hover:text-white">Informations légales</a>
+                <Link href="/legales" className="hover:text-white">
+                  Informations légales
                 </Link>
               </li>
               <li>
-                <Link href="/pub">
-                  <a className="hover:text-white">Choix liés à la pub</a>
+                <Link href="/pub" className="hover:text-white">
+                  Choix liés à la pub
                 </Link>
               </li>
               <li>
-                <Link href="/cadeaux">
-                  <a className="hover:text-white">Cartes cadeaux</a>
+                <Link href="/cadeaux" className="hover:text-white">
+                  Cartes cadeaux
                 </Link>
               </li>
             </ul>
@@ -63,18 +62,13 @@ export default function Footer() {
             <h6 className="text-white mb-4">Boutique</h6>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/boutique">
-                  <a className="hover:text-white">Boutique Netflix</a>
+                <Link href="/cookies" className="hover:text-white">
+                  Préférences de cookies
                 </Link>
               </li>
               <li>
-                <Link href="/cookies">
-                  <a className="hover:text-white">Préférences de cookies</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/presse">
-                  <a className="hover:text-white">Presse</a>
+                <Link href="/presse" className="hover:text-white">
+                  Presse
                 </Link>
               </li>
             </ul>
@@ -84,13 +78,13 @@ export default function Footer() {
             <h6 className="text-white mb-4">Juridique</h6>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/conditions">
-                  <a className="hover:text-white">Conditions d'utilisation</a>
+                <Link href="/conditions" className="hover:text-white">
+                  Conditions d'utilisation
                 </Link>
               </li>
               <li>
-                <Link href="/mentions">
-                  <a className="hover:text-white">Mentions légales</a>
+                <Link href="/mentions" className="hover:text-white">
+                  Mentions légales
                 </Link>
               </li>
             </ul>
@@ -98,17 +92,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-sm">
-          <div className="mb-4">
-            <span className="text-white">CONT © GROVE</span> • CANB STREET
-          </div>
-          <div className="mb-4">
-            <span className="text-white">FREE SAVOIR</span> • SEES VOTRE
-          </div>
-          <div className="mb-4">
-            <span className="text-white">INTERNARX</span> • ENJUPE DE RECUMBRED
-          </div>
           <div className="text-gray-600">
-            © 1997-2005 Netflix, Inc. • Train Merge • UNIOR AMATE RIVELANT
+            © 2025 Streamtflix - Tous droits réservés.
           </div>
         </div>
       </div>

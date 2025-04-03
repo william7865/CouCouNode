@@ -1,4 +1,3 @@
-// components/Header.js
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,7 +26,8 @@ export default function Header() {
         <div className="flex items-center gap-8">
           <img
             src="/logo.png"
-            alt="NETFLIX"
+            alt="Streamflix"
+            onClick={() => router.push("/")}
             className="h-8 w-32 object-contain"
           />
 
@@ -51,9 +51,9 @@ export default function Header() {
               Séries
             </Link>
             <Link
-              href="/films"
+              href="/movie"
               className={`pb-1 ${
-                isActive("/films")
+                isActive("/movie")
                   ? "border-b-2 border-white"
                   : "hover:opacity-75"
               }`}
@@ -70,25 +70,11 @@ export default function Header() {
             >
               Nouveautés les plus regardées
             </Link>
-            <Link
-              href="/maliste"
-              className={`pb-1 ${
-                isActive("/maliste")
-                  ? "border-b-2 border-white"
-                  : "hover:opacity-75"
-              }`}
-            >
-              Ma liste
-            </Link>
           </div>
         </div>
 
         <div className="flex items-center gap-6 text-white">
-          <button className="hover:opacity-75">
-            <span className="material-icons">language</span>
-            Explorer par langue
-          </button>
-          <Link href="/compte" className="hover:opacity-75">
+          <Link href="/account" className="hover:opacity-75">
             Compte
           </Link>
         </div>
