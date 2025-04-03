@@ -12,7 +12,6 @@ export default function Account() {
     title: "",
     description: "",
     release_year: "",
-    image_url: "",
   });
   const [movieMessage, setMovieMessage] = useState("");
   const router = useRouter();
@@ -112,45 +111,6 @@ export default function Account() {
       fetchSubscription();
     }
   }, [user]);
-
-  // Nouvelle fonction pour gérer l'ajout d'un film
-  const handleAddMovie = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch("http://localhost:3001/movies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(movie), // Inclut image_url
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMovieMessage("Film ajouté avec succès !");
-        setMovie({
-          title: "",
-          description: "",
-          release_year: "",
-          image_url: "",
-        }); // Réinitialiser le formulaire
-      } else {
-        setMovieMessage(data.error || "Erreur lors de l'ajout du film.");
-      }
-    } catch (err) {
-      console.error("Erreur lors de l'ajout du film:", err);
-      setMovieMessage("Erreur lors de l'ajout du film.");
-    }
-  };
-
-  const handleMovieChange = (e) => {
-    const { name, value } = e.target;
-    setMovie((prevMovie) => ({
-      ...prevMovie,
-      [name]: value,
-    }));
-  };
 
   if (loading) {
     return (
@@ -273,12 +233,12 @@ export default function Account() {
                   </li>
                 </ul>
               </div>
+            </div>
+          </div>
 
           {user.role === "admin" && (
             <div className="bg-gray-800 p-6 rounded-lg mt-8">
-              <h2 className="text-xl font-bold mb-4">
-                Ajouter un film (Admin)
-              </h2>
+              <h2 className="text-xl font-bold mb-4">Ajouter un film</h2>
               <form onSubmit={handleAddMovie}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>

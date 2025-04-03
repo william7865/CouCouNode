@@ -83,19 +83,23 @@ export default function MoviePage() {
                 <p className="text-white text-lg mb-6">
                   {mostRecentMovie.description}
                 </p>
-                <p className="text-gray-300">
+                <p className="text-gray-300 mb-6">
                   <strong>Année de sortie :</strong>{" "}
                   {mostRecentMovie.release_year}
                 </p>
+                <button
+                  onClick={() => router.push(`/movie/${mostRecentMovie.id}`)}
+                  className="bg-white hover:bg-gray-200 text-black py-3 px-6 rounded transition-colors"
+                >
+                  Lecture
+                </button>
               </div>
             </div>
           </div>
         )}
         {/* Carrousel des films */}
         <div className="relative max-w-5xl mx-auto mb-8">
-          <h3 className="text-3xl font-bold text-white mb-6">
-            Carrousel des Films
-          </h3>
+          <h3 className="text-3xl font-bold text-white mb-6">Films préférés</h3>
           <div className="flex overflow-hidden">
             {/* Bouton gauche */}
             <button
@@ -129,6 +133,12 @@ export default function MoviePage() {
                       <p className="text-gray-300 mt-2">
                         <strong>Année de sortie :</strong> {movie.release_year}
                       </p>
+                      <button
+                        onClick={() => router.push(`/movie/${movie.id}`)}
+                        className="mt-4 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded transition-colors"
+                      >
+                        Lecture
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -169,6 +179,12 @@ export default function MoviePage() {
                     <p className="text-gray-300 mt-2">
                       <strong>Année de sortie :</strong> {movie.release_year}
                     </p>
+                    <button
+                      onClick={() => router.push(`/movie/${movie.id}`)}
+                      className="mt-4 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded transition-colors"
+                    >
+                      Lecture
+                    </button>
                   </div>
                 </div>
               ))}
@@ -201,6 +217,12 @@ export default function MoviePage() {
                     <p className="text-gray-300 mt-2">
                       <strong>Année de sortie :</strong> {movie.release_year}
                     </p>
+                    <button
+                      onClick={() => router.push(`/movie/${movie.id}`)}
+                      className="mt-4 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded transition-colors"
+                    >
+                      Lecture
+                    </button>
                   </div>
                 </div>
               ))}
@@ -231,6 +253,12 @@ export default function MoviePage() {
                     <p className="text-gray-300 mt-2">
                       <strong>Année de sortie :</strong> {movie.release_year}
                     </p>
+                    <button
+                      onClick={() => router.push(`/movie/${movie.id}`)}
+                      className="mt-4 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded transition-colors"
+                    >
+                      Lecture
+                    </button>
                   </div>
                 </div>
               ))}
@@ -263,6 +291,12 @@ export default function MoviePage() {
                     <p className="text-gray-300 mt-2">
                       <strong>Année de sortie :</strong> {movie.release_year}
                     </p>
+                    <button
+                      onClick={() => router.push(`/movie/${movie.id}`)}
+                      className="mt-4 bg-white hover:bg-gray-200 text-black py-2 px-4 rounded transition-colors"
+                    >
+                      Lecture
+                    </button>
                   </div>
                 </div>
               ))}

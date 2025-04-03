@@ -52,7 +52,7 @@ export default function Home() {
       <div className="container mx-auto px-4 py-6">
         {/* Message de bienvenue */}
         <h1 className="text-4xl font-bold mb-6">
-          Bienvenue {user?.full_name || "Utilisateur"} !
+          Bonjour, {user?.full_name || "Utilisateur"} !
         </h1>
 
         {/* Section des films */}
