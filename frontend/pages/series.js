@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
-import Header from "./header";
+import Header from "./components/header";
 
 const CATEGORIES = [
   { id: 1, name: "Action", displayName: "Action" },

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Header from "./header";
 import "/src/app/globals.css";
 
 export default function Security() {
@@ -145,6 +144,14 @@ export default function Security() {
                 >
                   Profils
                 </li>
+                {user.role === "admin" && (
+                  <li
+                    className="hover:text-white cursor-pointer"
+                    onClick={() => router.push("/management")}
+                  >
+                    Gestion
+                  </li>
+                )}
               </ul>
             </div>
             <div className="md:col-span-3">

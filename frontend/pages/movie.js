@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
-import Header from "./header";
+import Header from "./components/header";
 
 export default function MoviePage() {
   const { token } = useContext(AuthContext);

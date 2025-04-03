@@ -36,7 +36,6 @@ class User {
     { email, full_name, birth_date, password, newPassword }
   ) {
     let updatedPassword = null;
-    // Si un changement de mot de passe est demandé, vérifier le mot de passe actuel
     if (newPassword) {
       if (!password) {
         throw new Error(

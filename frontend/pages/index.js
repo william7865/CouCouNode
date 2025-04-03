@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
-import Header from "./header";
+import Header from "./components/header";
+import "/src/app/globals.css";
 
 export default function Home() {
   const { token, user } = useContext(AuthContext); // Accès au token et au nom de l'utilisateur
