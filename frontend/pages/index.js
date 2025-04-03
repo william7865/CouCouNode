@@ -44,20 +44,21 @@ export default function Home() {
     fetchSeries();
   }, [token]);
 
+  console.log("Utilisateur :", user);
+  console.log("Nom complet :", user?.full_name);
+
   if (!token) return <p>Redirection en cours...</p>;
 
   return (
     <div className="min-h-screen bg-black text-white">
       <Header />
+
       <div className="container mx-auto px-4 py-6">
         {/* Message de bienvenue */}
-        <h1 className="text-4xl font-bold mb-6">
-          Bonjour, {user?.full_name || "Utilisateur"} !
-        </h1>
 
         {/* Section des films */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-4">Films populaires</h2>
+          <h2 className="text-3xl font-bold mb-4 mt-10">Films populaires</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {movies.length > 0 ? (
               movies.map((movie) => (
