@@ -360,6 +360,8 @@ app.get("/series", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+const episodesRoutes = require("./routes/episodes");
+app.use("/episodes", episodesRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

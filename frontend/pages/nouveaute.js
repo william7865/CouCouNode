@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
-import Header from "./header";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 export default function NouveautePage() {
   const { token } = useContext(AuthContext);
@@ -37,9 +38,9 @@ export default function NouveautePage() {
   }, [token]);
 
   return (
-    <>
+    <div className="min-h-screen bg-black text-white">
       <Header />
-      <main style={{ padding: "2rem", color: "#fff" }}>
+      <main className="p-8 pt-20">
         <h1>Nouveautés</h1>
         {episodes.length === 0 ? (
           <p>Aucun épisode récent.</p>
@@ -53,6 +54,7 @@ export default function NouveautePage() {
           </ul>
         )}
       </main>
-    </>
+      <Footer />
+    </div>
   );
 }

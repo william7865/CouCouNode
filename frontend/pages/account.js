@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Footer from "./components/footer";
 import "/src/app/globals.css";
 
 export default function Account() {
@@ -248,6 +249,7 @@ export default function Account() {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

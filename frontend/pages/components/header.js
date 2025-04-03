@@ -61,9 +61,9 @@ export default function Header() {
               Films
             </Link>
             <Link
-              href="/nouveautes"
+              href="/nouveaute"
               className={`pb-1 ${
-                isActive("/nouveautes")
+                isActive("/nouveaute")
                   ? "border-b-2 border-white"
                   : "hover:opacity-75"
               }`}
