@@ -201,7 +201,12 @@ export default function Account() {
   return (
     <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-red-600">Streamflix</h1>
+        <img
+          src="/images/logo-streamflix.png"
+          alt="Streamflix"
+          onClick={() => router.push("/")}
+          className="h-16 w-40 object-contain transform scale-300 cursor-pointer"
+        />
 
         <div className="mb-8">
           <button
