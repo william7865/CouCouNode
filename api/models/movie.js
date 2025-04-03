@@ -25,23 +25,29 @@ class Movie {
     description,
     release_year,
     user_id,
+    genre_id,
+    image_url,
     last_active,
     image_url,
   }) {
     const result = await pool.query(
+      
       "INSERT INTO movies (title, description, release_year, user_id, last_active, image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [title, description, release_year, user_id, last_active, image_url]
+
     );
     return result.rows[0];
   }
 
   static async updateMovie(
     id,
+
     { title, description, release_year, user_id, last_active, image_url }
   ) {
     const result = await pool.query(
       "UPDATE movies SET title = $1, description = $2, release_year = $3, user_id = $4, last_active = $5, image_url = $6 WHERE id = $7 RETURNING *",
       [title, description, release_year, user_id, last_active, image_url, id]
+
     );
     return result.rows[0];
   }
