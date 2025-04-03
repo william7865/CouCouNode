@@ -9,11 +9,7 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(currentScrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -69,9 +65,9 @@ export default function Header() {
             Série
           </Link>
           <Link
-            href="/news"
+            href="/nouveaute"
             style={{
-              borderBottom: isActive("/news") ? "2px solid white" : "none",
+              borderBottom: isActive("/nouveaute") ? "2px solid white" : "none",
             }}
           >
             Nouveautés
