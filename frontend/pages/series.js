@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
 import Header from "./components/header";
 
-// Données constantes
 const categories = [
   { id: 1, name: "Action", displayName: "Action" },
   { id: 2, name: "Drame", displayName: "Drame" },
@@ -40,7 +39,6 @@ const genres = [
   { id: 16, name: 'Guerre' }
 ];
 
-// Composants enfants
 const SeriesCard = ({ serie, onClick }) => (
   <div 
     className="group relative aspect-video rounded-md overflow-hidden cursor-pointer transition-transform hover:scale-105 hover:z-10"
@@ -90,9 +88,7 @@ const CloseButton = ({ onClick }) => (
   </button>
 );
 
-// Composant principal
 export default function SeriesPage() {
-  // États
   const { token } = useContext(AuthContext);
   const router = useRouter();
   const [series, setSeries] = useState([]);
@@ -109,13 +105,11 @@ export default function SeriesPage() {
   });
   const [isMuted, setIsMuted] = useState(true);
   
-  // Références
   const videoRef = useRef(null);
   const videoContainerRef = useRef(null);
   const timeoutRef = useRef(null);
   const scrollPositionRef = useRef(0);
 
-  // Récupération des séries
   const fetchSeries = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:3001/series", {
@@ -180,8 +174,6 @@ export default function SeriesPage() {
       setIsLoading(false);
     }
   }, [token]);
-
-  // Filtrer les séries par catégorie
   const getSeriesByCategory = useCallback((category) => {
     const isClassicCategory = category.name === "Classiques";
     
@@ -194,12 +186,10 @@ export default function SeriesPage() {
       .sort((a, b) => isClassicCategory ? (b.popularity || 0) - (a.popularity || 0) : 0);
   }, [series, featuredSerie]);
 
-  // Gestion du survol de la vidéo
   const handleVideoHover = useCallback((isHovering) => {
     setVideoState(prev => ({ ...prev, isHovered: isHovering }));
   }, []);
 
-  // Basculer le son
   const toggleMute = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
@@ -207,18 +197,14 @@ export default function SeriesPage() {
     }
   }, []);
 
-  // Gestion du clic sur un épisode
   const handleEpisodeClick = useCallback((serie, episode) => {
     if (serie.netflixUrl) {
-      // Redirection vers Netflix
       window.open(episode.netflixUrl || serie.netflixUrl, '_blank');
     } else {
-      // Afficher le lecteur intégré
       setSelectedEpisode(episode);
     }
   }, []);
 
-  // Effets
   useEffect(() => {
     if (!token) router.push("/login");
     else fetchSeries();
@@ -260,12 +246,10 @@ export default function SeriesPage() {
     };
   }, [featuredSerie]);
 
-  // Gestion du scroll pour réinitialiser la vidéo
   useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       
-      // Si on remonte vers le haut et qu'on atteint le haut de page
       if (currentScroll === 0 && scrollPositionRef.current > 0) {
         if (videoRef.current) {
           videoRef.current.currentTime = 0;
