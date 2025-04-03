@@ -12,7 +12,6 @@ const categories = [
   { id: 5, name: "Classiques", displayName: "Séries Cultes" }
 ];
 
-// Liste des séries classiques
 const classicSeries = [
   "Breaking Bad", 
   "Game of Thrones",
@@ -20,6 +19,25 @@ const classicSeries = [
   "The Sopranos",
   "Lost",
   "Prison Break"
+];
+
+const genres = [
+  { id: 1, name: 'Thriller' },
+  { id: 2, name: 'Fantasy' },
+  { id: 3, name: 'Historique' },
+  { id: 4, name: 'Super-héros' },
+  { id: 5, name: 'Survival' },
+  { id: 6, name: 'Horreur' },
+  { id: 7, name: 'Familial' },
+  { id: 8, name: 'Romance' },
+  { id: 9, name: 'Crime' },
+  { id: 10, name: 'Mystère' },
+  { id: 11, name: 'Aventure' },
+  { id: 12, name: 'Science-Fiction' },
+  { id: 13, name: 'Drame' },
+  { id: 14, name: 'Humour' },
+  { id: 15, name: 'Biographie' },
+  { id: 16, name: 'Guerre' }
 ];
 
 // Composants enfants
