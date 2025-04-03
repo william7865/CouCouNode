@@ -135,9 +135,9 @@ export default function Security() {
                 </li>
                 <li
                   className="hover:text-white cursor-pointer"
-                  onClick={() => router.push("/devices")}
+                  onClick={() => router.push("/security")}
                 >
-                  Appareils
+                  Sécurité
                 </li>
                 <li
                   className="hover:text-white cursor-pointer"
