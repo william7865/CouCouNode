@@ -54,6 +54,49 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// ROUTE : Lister les utilisateurs (admin uniquement)
+app.get("/users", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const currentUser = await User.getUserById(decoded.id);
+    if (currentUser.role !== "admin") {
+      return res.status(403).json({ error: "Accès refusé" });
+    }
+    const users = await User.getAllUsers();
+    res.json({ users });
+  } catch (error) {
+    res.status(401).json({ error: "Token invalide" });
+  }
+});
+
+// ROUTE : Supprimer un utilisateur (admin uniquement)
+app.delete("/users/:id", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const currentUser = await User.getUserById(decoded.id);
+    if (currentUser.role !== "admin") {
+      return res.status(403).json({ error: "Accès refusé" });
+    }
+    const deletedUser = await User.deleteUser(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ error: "Utilisateur non trouvé" });
+    }
+    res.json({ message: "Utilisateur supprimé", user: deletedUser });
+  } catch (error) {
+    res.status(401).json({ error: "Token invalide" });
+  }
+});
+
 // ROUTE : Compte (récupérer les informations) - modifié
 app.get("/account", async (req, res) => {
   const authHeader = req.headers.authorization;
@@ -211,6 +254,59 @@ app.get("/subscription", async (req, res) => {
     res.status(401).json({ error: "Token invalide" });
   }
 });
+// ROUTE : Modifier l'abonnement d'un utilisateur (admin uniquement)
+app.patch("/subscription/:userId", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const currentUser = await User.getUserById(decoded.id);
+    if (currentUser.role !== "admin") {
+      return res.status(403).json({ error: "Accès refusé" });
+    }
+    const { userId } = req.params;
+    const { status } = req.body; // Ex : "active", "canceled", "pending"
+    const updatedSubscription = await Subscription.updateSubscription(
+      userId,
+      status
+    );
+    if (!updatedSubscription) {
+      return res.status(404).json({ error: "Abonnement non trouvé" });
+    }
+    res.status(200).json({ subscription: updatedSubscription });
+  } catch (error) {
+    console.error("Erreur lors de la vérification du token :", error);
+    res.status(401).json({ error: "Token invalide" });
+  }
+});
+
+// ROUTE : Annuler un abonnement
+app.delete("/subscription/cancel", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const canceledSubscription = await Subscription.cancelSubscription(
+      decoded.id
+    );
+    if (!canceledSubscription) {
+      return res.status(404).json({ error: "Abonnement non trouvé" });
+    }
+    res.json({
+      message: "Abonnement annulé avec succès",
+      subscription: canceledSubscription,
+    });
+  } catch (error) {
+    console.error("Erreur lors de l'annulation de l'abonnement:", error);
+    res.status(401).json({ error: "Token invalide" });
+  }
+});
 
 // ROUTE : Créer un film
 app.post("/movies", async (req, res) => {
@@ -264,6 +360,8 @@ app.get("/series", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+const episodesRoutes = require("./routes/episodes");
+app.use("/episodes", episodesRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

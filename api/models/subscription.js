@@ -17,6 +17,21 @@ class Subscription {
     );
     return result.rows[0];
   }
+
+  static async cancelSubscription(userId) {
+    const result = await pool.query(
+      "UPDATE Subscriptions SET status = $1 WHERE user_id = $2 RETURNING *",
+      ["canceled", userId]
+    );
+    return result.rows[0];
+  }
+  static async updateSubscription(userId, newStatus) {
+    const result = await pool.query(
+      "UPDATE Subscriptions SET status = $1 WHERE user_id = $2 RETURNING *",
+      [newStatus, userId]
+    );
+    return result.rows[0];
+  }
 }
 
 module.exports = Subscription;

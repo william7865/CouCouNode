@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Header from "./header";
 import "/src/app/globals.css";
 
 export default function Security() {
@@ -16,7 +15,7 @@ export default function Security() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Récupérer le compte de l'utilisateur via l'endpoint "/account"
+  // Récupérer le compte de l'utilisateur
   useEffect(() => {
     async function fetchAccount() {
       const token = localStorage.getItem("token");
@@ -114,7 +113,12 @@ export default function Security() {
     <>
       <div className="min-h-screen bg-black text-white p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-red-600">Streamflix</h1>
+          <img
+            src="/images/logo-streamflix.png"
+            alt="Streamflix"
+            onClick={() => router.push("/")}
+            className="h-16 w-40 cursor-pointer"
+          />
           <div className="mb-8">
             <button
               className="text-gray-300 hover:text-white"
@@ -145,6 +149,14 @@ export default function Security() {
                 >
                   Profils
                 </li>
+                {user.role === "admin" && (
+                  <li
+                    className="hover:text-white cursor-pointer"
+                    onClick={() => router.push("/management")}
+                  >
+                    Gestion
+                  </li>
+                )}
               </ul>
             </div>
             <div className="md:col-span-3">

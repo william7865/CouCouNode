@@ -30,7 +30,11 @@ export default function Register() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <header className="mb-6">
-        <img src="/logo.svg" alt="Streamflix" className="w-32" />
+        <img
+          src="/images/logo-streamflix.png"
+          alt="Streamflix"
+          className="h-12 w-48 object-contain transform scale-200 cursor-pointer"
+        />
       </header>
 
       <form
@@ -107,7 +111,7 @@ export default function Register() {
           type="button"
           className="w-full flex items-center justify-center bg-white text-black p-2 rounded shadow hover:bg-gray-200 transition"
         >
-          <img src="/google-icon.svg" alt="Google" className="w-5 mr-2" />
+          <img src="/images/google.png" alt="Google" className="w-5 mr-2" />
           Continuer avec Google
         </button>
 

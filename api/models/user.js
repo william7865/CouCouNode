@@ -31,12 +31,17 @@ class User {
     return result.rows[0];
   }
 
+  // Méthode pour récupérer la liste de tous les utilisateurs
+  static async getAllUsers() {
+    const result = await pool.query(`SELECT * FROM users`);
+    return result.rows;
+  }
+
   static async updateUser(
     id,
     { email, full_name, birth_date, password, newPassword }
   ) {
     let updatedPassword = null;
-    // Si un changement de mot de passe est demandé, vérifier le mot de passe actuel
     if (newPassword) {
       if (!password) {
         throw new Error(
