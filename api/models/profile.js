@@ -35,6 +35,14 @@ class Profile {
     );
     return result.rows[0];
   }
+  // Mettre à jour le nom d'un profil par son identifiant
+  static async updateProfile({ id, name }) {
+    const result = await pool.query(
+      `UPDATE Profiles SET name = $1 WHERE id = $2 RETURNING *`,
+      [name, id]
+    );
+    return result.rows[0];
+  }
 }
 
 module.exports = Profile;

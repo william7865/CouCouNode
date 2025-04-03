@@ -47,7 +47,44 @@ export default function Account() {
     fetchAccount();
   }, [router]);
 
-  // Nouvelle fonction pour récupérer le statut de l'abonnement
+  // Gestion du changement dans les champs du formulaire
+  const handleMovieChange = (e) => {
+    setMovie({
+      ...movie,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Gestion de l'ajout d'un film par l'admin
+  const handleAddMovie = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch("http://localhost:3001/movies", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(movie),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setMovieMessage(data.error || "Erreur lors de l'ajout du film.");
+      } else {
+        setMovieMessage("Film ajouté avec succès !");
+        setMovie({
+          title: "",
+          description: "",
+          release_year: "",
+        });
+      }
+    } catch (err) {
+      setMovieMessage("Erreur lors de l'ajout du film.");
+    }
+  };
+
+  //Récupérer le statut de l'abonnement
   useEffect(() => {
     async function fetchSubscription() {
       const token = localStorage.getItem("token");
@@ -60,7 +97,7 @@ export default function Account() {
         });
         const data = await response.json();
         if (response.ok) {
-          setSubscriptionStatus(data.status); // Assurez-vous que l'API renvoie bien une propriété "status"
+          setSubscriptionStatus(data.status);
         } else {
           setSubscriptionStatus(
             "Erreur lors de la récupération de l'abonnement"
@@ -118,7 +155,6 @@ export default function Account() {
   if (loading) {
     return (
       <>
-        <Header />
         <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
           Chargement...
         </div>
@@ -143,7 +179,10 @@ export default function Account() {
           <h1 className="text-4xl font-bold mb-8 text-red-600">Streamflix</h1>
 
           <div className="mb-8">
-            <button className="text-gray-300 hover:text-white">
+            <button
+              className="text-gray-300 hover:text-white"
+              onClick={() => router.push("/")}
+            >
               ← Retour à Streamflix
             </button>
           </div>
@@ -166,12 +205,6 @@ export default function Account() {
                 </li>
                 <li
                   className="hover:text-white cursor-pointer"
-                  onClick={() => router.push("/devices")}
-                >
-                  Appareils
-                </li>
-                <li
-                  className="hover:text-white cursor-pointer"
                   onClick={() => router.push("/profiles")}
                 >
                   Profils
@@ -180,14 +213,15 @@ export default function Account() {
             </div>
 
             <div className="col-span-3">
-              <h2 className="text-2xl font-bold mb-6">Compte</h2>
+              <h2 className="text-4xl font-bold mb-2">Compte</h2>
 
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-2">
                   Détails de l'abonnement
                 </h3>
                 <p className="text-gray-400 mb-2">
-                  Abonnement débuté en avril 2020
+                  Compte créé le{" "}
+                  {new Date(user.created_at).toLocaleDateString("fr-FR")}
                 </p>
                 <p className="text-gray-400 mb-4">
                   Statut de l'abonnement :{" "}
@@ -197,7 +231,9 @@ export default function Account() {
                 <p className="text-gray-400 mb-4">
                   Prochain paiement : 18 avril 2025
                 </p>
-                <p className="text-gray-400 mb-4">{user.email}</p>
+                <p className="text-gray-400 mb-4">
+                  Compte de l'utilisateur : {user.email}
+                </p>
                 <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
                   Gérer l'abonnement
                 </button>
@@ -238,80 +274,63 @@ export default function Account() {
                 </ul>
               </div>
 
-              {user.role === "admin" && (
-                <div className="bg-gray-800 p-6 rounded-lg mt-8">
-                  <h2 className="text-xl font-bold mb-4">
-                    Ajouter un film (Admin)
-                  </h2>
-                  <form onSubmit={handleAddMovie}>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                      <div>
-                        <label className="block mb-2 text-gray-400">
-                          Titre
-                        </label>
-                        <input
-                          type="text"
-                          name="title"
-                          value={movie.title}
-                          onChange={handleMovieChange}
-                          className="w-full p-2 rounded bg-gray-700 text-white"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-gray-400">
-                          Année de sortie
-                        </label>
-                        <input
-                          type="number"
-                          name="release_year"
-                          value={movie.release_year}
-                          onChange={handleMovieChange}
-                          className="w-full p-2 rounded bg-gray-700 text-white"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-gray-400">
-                          URL de l'image
-                        </label>
-                        <input
-                          type="text"
-                          name="image_url"
-                          value={movie.image_url}
-                          onChange={handleMovieChange}
-                          className="w-full p-2 rounded bg-gray-700 text-white"
-                          placeholder="http://example.com/image.jpg"
-                        />
-                      </div>
-                    </div>
-                    <div className="mb-4">
-                      <label className="block mb-2 text-gray-400">
-                        Description
-                      </label>
-                      <textarea
-                        name="description"
-                        value={movie.description}
-                        onChange={handleMovieChange}
-                        className="w-full p-2 rounded bg-gray-700 text-white"
-                        required
-                        rows="4"
-                      ></textarea>
-                    </div>
-                    <button
-                      type="submit"
-                      className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
-                    >
-                      Ajouter le film
-                    </button>
-                    {movieMessage && (
-                      <p className="mt-4 text-red-400">{movieMessage}</p>
-                    )}
-                  </form>
+          {user.role === "admin" && (
+            <div className="bg-gray-800 p-6 rounded-lg mt-8">
+              <h2 className="text-xl font-bold mb-4">
+                Ajouter un film (Admin)
+              </h2>
+              <form onSubmit={handleAddMovie}>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="block mb-2 text-gray-400">Titre</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={movie.title}
+                      onChange={handleMovieChange}
+                      className="w-full p-2 rounded bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-gray-400">
+                      Année de sortie
+                    </label>
+                    <input
+                      type="number"
+                      name="release_year"
+                      value={movie.release_year}
+                      onChange={handleMovieChange}
+                      className="w-full p-2 rounded bg-gray-700 text-white"
+                      required
+                    />
+                  </div>
                 </div>
-              )}
+                <div className="mb-4">
+                  <label className="block mb-2 text-gray-400">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    value={movie.description}
+                    onChange={handleMovieChange}
+                    className="w-full p-2 rounded bg-gray-700 text-white"
+                    required
+                    rows="4"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded"
+                >
+                  Ajouter le film
+                </button>
+                {movieMessage && (
+                  <p className="mt-4 text-red-400">{movieMessage}</p>
+                )}
+              </form>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

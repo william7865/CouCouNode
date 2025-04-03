@@ -167,6 +167,30 @@ app.delete("/profiles/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// ROUTE : Mettre à jour un profil
+app.put("/profiles/:id", async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token manquant" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const profileId = req.params.id;
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: "Nom du profil requis" });
+    }
+    const updatedProfile = await Profile.updateProfile({ id: profileId, name });
+    res.json({
+      message: "Profil modifié avec succès",
+      profile: updatedProfile,
+    });
+  } catch (error) {
+    console.error("Erreur lors de la modification du profil :", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // ROUTE : Abonnement de l'utilisateur
 app.get("/subscription", async (req, res) => {
