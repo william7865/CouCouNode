@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import AuthContext from "../context/AuthContext";
 import Header from "./components/header";
+import Footer from "./components/footer";
 
 const categories = [
   { id: 1, name: "Action", displayName: "Action" },
@@ -303,7 +304,7 @@ export default function SeriesPage() {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                       </svg>
-                      Regarder sur Netflix
+                      Regarder sur Streamflix
                     </button>
                   ) : (
                     <button className="bg-white hover:bg-gray-200 text-black px-6 py-2 rounded flex items-center gap-2 font-bold transition-colors">
@@ -374,7 +375,7 @@ export default function SeriesPage() {
                               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.012-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z" />
                               </svg>
-                              <span>Disponible sur Netflix</span>
+                              <span>Disponible sur Streamflix</span>
                             </div>
                           )}
                         </div>
@@ -459,7 +460,7 @@ export default function SeriesPage() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.012-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z" />
                         </svg>
-                        <p className="text-red-400 font-medium">Disponible sur Netflix</p>
+                        <p className="text-red-400 font-medium">Disponible sur Streamflix</p>
                       </div>
                     )}
                   </div>
@@ -498,7 +499,7 @@ export default function SeriesPage() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 24 24" fill="currentColor">
                                   <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.012-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z" />
                                 </svg>
-                                <span>Netflix</span>
+                                <span>Streamflix</span>
                               </div>
                             )}
                           </div>
@@ -616,7 +617,7 @@ export default function SeriesPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M5.398 0v.006c3.028 8.556 5.37 15.175 8.348 23.596 2.344.058 4.85.398 4.854.398-2.8-7.924-5.923-16.747-8.487-24zm8.489 0v9.63L18.6 22.951c-.043-7.86-.004-15.913.012-22.95zM5.398 1.05V24c1.873-.225 2.81-.312 4.715-.398v-9.22z" />
                   </svg>
-                  <span>Netflix</span>
+                  <span>Streamflix</span>
                 </span>
               )}
               
@@ -652,7 +653,7 @@ export default function SeriesPage() {
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                   </svg>
-                  Regarder sur Netflix
+                  Regarder sur Streamflix
                 </button>
               ) : (
                 <button className="bg-white hover:bg-gray-200 text-black px-6 py-2 md:px-8 md:py-3 rounded flex items-center gap-2 text-lg font-bold transition-colors">
@@ -702,6 +703,7 @@ export default function SeriesPage() {
             </div>
           );
         })}
+        <Footer />
       </div>
     </div>
   );
