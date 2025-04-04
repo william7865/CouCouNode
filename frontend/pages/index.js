@@ -76,12 +76,12 @@ export default function Home() {
             </span>
           </h1>
         </div>
-        <div className="container mx-auto px-4 py-8 relative z-10  backdrop-blur-sm">
-          {/* Section Films */}
+        <div className="container mx-auto px-4 py-8 relative z-10 bg-black/90 backdrop-blur-sm">
+          {/* Section Films - Format vertical (2:3) */}
           <div className="mb-16">
             <div className="flex items-baseline gap-4 mb-8">
               <h2 className="text-3xl font-bold border-l-4 border-cyan-400 pl-3">
-                TOP 10 DES PLANS
+                TOP 10 DES FILMS
               </h2>
               <span className="text-cyan-400 font-semibold text-xl">
                 PLEASURE
@@ -95,22 +95,25 @@ export default function Home() {
                     key={movie.id}
                     className="bg-gray-900 rounded-xl shadow-xl overflow-hidden transform transition hover:scale-105 hover:shadow-2xl"
                   >
-                    {movie.image_url ? (
-                      <img
-                        src={movie.image_url}
-                        alt={movie.title}
-                        className="w-full h-64 object-cover"
-                        onError={(e) => {
-                          e.target.src = "https://picsum.photos/300/200";
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-64 bg-gray-800 flex items-center justify-center">
-                        <span className="text-gray-400">Pas d'affiche</span>
-                      </div>
-                    )}
+                    <div className="relative pt-[150%] bg-gray-800"> {/* Ratio 2:3 */}
+                      {movie.image_url ? (
+                        <img
+                          src={movie.image_url}
+                          alt={movie.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/300x450?text=No+Poster";
+                            e.target.className = "absolute inset-0 w-full h-full object-contain p-2";
+                          }}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-gray-400">Pas d'affiche</span>
+                        </div>
+                      )}
+                    </div>
                     <div className="p-4">
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 line-clamp-1">
                         {movie.title}
                       </h3>
                       <p className="text-gray-400 text-sm mb-3 line-clamp-2">
@@ -128,10 +131,10 @@ export default function Home() {
             )}
           </div>
 
-          {/* Section Séries */}
+          {/* Section Séries - Format horizontal (16:9) */}
           <div className="mb-16">
             <div className="flex items-baseline gap-4 mb-8">
-              <h2 className="text-3xl font-bold border-l-4 border-cyan-400  pl-3">
+              <h2 className="text-3xl font-bold border-l-4 border-cyan-400 pl-3">
                 TOP 10 DES SÉRIES
               </h2>
               <span className="text-cyan-400 font-semibold text-xl">
@@ -140,28 +143,31 @@ export default function Home() {
             </div>
 
             {series.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {series.slice(0, 10).map((serie) => (
                   <div
                     key={serie.id}
                     className="bg-gray-900 rounded-xl shadow-xl overflow-hidden transform transition hover:scale-105 hover:shadow-2xl"
                   >
-                    {serie.image_url ? (
-                      <img
-                        src={serie.image_url}
-                        alt={serie.title}
-                        className="w-full h-64 object-cover"
-                        onError={(e) => {
-                          e.target.src = "https://picsum.photos/300/200";
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-64 bg-gray-800 flex items-center justify-center">
-                        <span className="text-gray-400">Pas d'affiche</span>
-                      </div>
-                    )}
+                    <div className="relative pt-[56.25%] bg-gray-800"> {/* Ratio 16:9 */}
+                      {serie.image_url ? (
+                        <img
+                          src={serie.image_url}
+                          alt={serie.title}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/800x450?text=No+Cover";
+                            e.target.className = "absolute inset-0 w-full h-full object-contain p-2";
+                          }}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-gray-400">Pas d'affiche</span>
+                        </div>
+                      )}
+                    </div>
                     <div className="p-4">
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 line-clamp-1">
                         {serie.title}
                       </h3>
                       <p className="text-gray-400 text-sm mb-3 line-clamp-2">
